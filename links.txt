@@ -1,0 +1,4 @@
+https://gstreamer.freedesktop.org/documentation/tutorials/basic/gstreamer-tools.html?gi-language=python#gstlaunch10
+
+
+https://gstreamer.freedesktop.org/documentation/tools/gst-launch.html?gi-language=python
