@@ -1,0 +1,61 @@
+Kendi kameramdan görüntü almak istiyorsam,  
+gst-launch-1.0 v4l2src device="/dev/video0" ! videoconvert ! autovideosink 
+
+
+Saat Ekliyor, 
+gst-launch-1.0 v4l2src device="/dev/video0" ! videoconvert ! clockoverlay ! autovideosink 
+
+
+Ekranları alıyor, 
+gst-launch-1.0 ximagesrc ! videoconvert ! clockoverlay ! autovideosink 
+
+
+RTSP Görüntüsü Alıyor, 
+gst-launch-1.0 rtspsrc location="rtsp://freja.hiof.no:1935/rtplive/_definst_/hessdalen03.stream" ! \ 
+rtph264depay ! avdec_h264 ! clockoverlay ! Autovideosink 
+
+
+Kamera Görüntüsünü HLS Protokolüyle Kaydediyor ve Yayınlıyor, 
+gst-launch-1.0 v4l2src device="/dev/video0" ! videoconvert ! clockoverlay ! x264enc tune=zerolatency ! mpegtsmux ! hlssink playlist-root=http://192.168.1.28:8080 location=/home/uraninjo/Masaüstü/Gstreamer/Siteler/hlstest/segment_%05d.ts target-duration=5 max-files=5
+
+python3 -m http.server 8080 
+
+Index.html oluşturduktan sonra görüntüye ulaşılabilir, 
+http://192.168.1.28:8080/index.html 
+
+
+Daha Optimize Hali, 
+gst-launch-1.0 -v v4l2src device="/dev/video0" ! videoconvert ! clockoverlay ! videoscale ! video/x-raw,width=640, height=360 ! x264enc bitrate=256 ! video/x-h264,profile="high" ! mpegtsmux ! hlssink playlist-root=http://192.168.1.28:8080 location=segment_%05d.ts target-duration=5 max-files=5 
+
+
+
+https://z25.org/static/_rd_/videostreaming_intro_plab/index.html 
+
+ 
+
+sudo apt-get install gstreamer1.0-tools  
+gstreamer1.0-plugins-base  gstreamer1.0-plugins-good  gstreamer1.0-plugins-bad  gstreamer1.0-plugins-ugly 
+
+ 
+
+Örnek Görüntü, 
+
+gst-launch-1.0 videotestsrc ! autovideosink 
+
+ 
+
+ 
+
+UDP_RTP, 
+
+Sender: 
+
+gst-launch-1.0 videotestsrc !  jpegenc !  rtpjpegpay !  udpsink host=127.0.0.1 port=5200 
+
+ 
+
+Reciever: 
+
+gst-launch-1.0 udpsrc port=5200 ! application/x-rtp,  encoding-name=JPEG,payload=26 !  
+rtpjpegdepay ! 
+jpegdec !  autovideosink 
