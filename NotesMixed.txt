@@ -33,8 +33,7 @@ https://z25.org/static/_rd_/videostreaming_intro_plab/index.html
 
  
 
-sudo apt-get install gstreamer1.0-tools  
-gstreamer1.0-plugins-base  gstreamer1.0-plugins-good  gstreamer1.0-plugins-bad  gstreamer1.0-plugins-ugly 
+sudo apt-get install gstreamer1.0-tools gstreamer1.0-plugins-base  gstreamer1.0-plugins-good  gstreamer1.0-plugins-bad  gstreamer1.0-plugins-ugly 
 
  
 
@@ -56,6 +55,4 @@ gst-launch-1.0 videotestsrc !  jpegenc !  rtpjpegpay !  udpsink host=127.0.0.1 p
 
 Reciever: 
 
-gst-launch-1.0 udpsrc port=5200 ! application/x-rtp,  encoding-name=JPEG,payload=26 !  
-rtpjpegdepay ! 
-jpegdec !  autovideosink 
+gst-launch-1.0 udpsrc port=5200 ! application/x-rtp,  encoding-name=JPEG,payload=26 ! rtpjpegdepay ! jpegdec ! autovideosink 
