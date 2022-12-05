@@ -10,10 +10,9 @@ from gi.repository import Gst, GLib, GObject
 
 uri_name='rtsp://127.0.0.1:8554/test'
 
-
-def cb_newpad(element, src, sink):
+def cb_newpad(demux, src, sink):
     print("In cb_newpad\n")
-    caps=sink.get_current_caps()
+    caps=src.get_current_caps()
     gststruct=caps.get_structure(0)
     gstname=gststruct.get_name()
     features=caps.get_features(0)
@@ -21,10 +20,10 @@ def cb_newpad(element, src, sink):
     print("gstname=",gstname)
     if(gstname.find("video")!=-1):
         print("features=",features)
-        sink_pad=sink.get_static_pad("video_0")
-        if not src.set_target(sink_pad):
-            sys.stderr.write("Failed to link decoder src pad to source bin ghost pad\n")
-
+        sink_pad=sink.get_static_pad("sink")
+        src.link(sink_pad)
+        """if not src.link(sink_pad):
+            sys.stderr.write("Failed to link decoder src pad to source bin ghost pad\n")"""
 
 
 
@@ -33,35 +32,32 @@ logger = logging.getLogger(__name__)
 
 Gst.init(None)
 
-pipeline=Gst.Pipeline.new('test2-pipeline')
+pipeline=Gst.Pipeline.new('test-pipeline')
 
 source=Gst.ElementFactory.make('rtspsrc','source')
 source.set_property('location', uri_name)
 
-if not source:
-    sys.stderr.write(" Unable to create source \n")
 depay=Gst.ElementFactory.make("rtph264depay", "depay")
-if not depay:
-    sys.stderr.write(" Unable to create depay \n")
 
-source.connect('pad_added', cb_newpad, depay)
+
 
 decoder=Gst.ElementFactory.make('avdec_h264','decoder')
-if not decoder:
-    sys.stderr.write(" Unable to create decoder \n")
 sink=Gst.ElementFactory.make('xvimagesink','sink')
-if not sink:
-    sys.stderr.write(" Unable to create sink \n")
-
 
 pipeline.add(source)
 pipeline.add(depay)
+
+source.connect('pad-added', cb_newpad, depay)
+
 pipeline.add(decoder)
 pipeline.add(sink)
 
-source.link(depay)
-depay.link(decoder)
-decoder.link(sink)
+
+
+if depay.link(decoder):
+    logger.info('depay-decoder Bağlandı')
+if decoder.link(sink):
+    logger.info('decoder-sink Bağlandı')
 
 ret=pipeline.set_state(Gst.State.PLAYING)
 
