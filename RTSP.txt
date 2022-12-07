@@ -1,0 +1,17 @@
+Sender:
+gst-launch-1.0 uridecodebin uri=http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4 ! x264enc ! rtspclientsink location=rtsp://127.0.0.1:8554/test
+
+gst-launch-1.0 -vv filesrc location=ElephantsDream.mp4 ! decodebin ! autovideoconvert ! nvh264enc ! rtspclientsink location=rtsp://127.0.0.1:8554/test
+
+
+
+Reciever:
+gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test caps="application/x-rtp,media=video,clock-rate=9000,payload=96" ! rtph264depay ! avdec_h264 ! xvimagesink
+
+gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test ! rtph264depay ! avdec_h264 ! xvimagesink
+
+gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test ! rtph264depay ! avdec_h264 ! xvimagesink
+
+
+
+gst-launch-1.0 -vv filesrc location=ElephantsDream.mp4 ! avdec_h264 ! video/x-raw,format=I420 ! videoconvert ! x264enc ! rtspclientsink location=rtsp://127.0.0.1:8554/test
