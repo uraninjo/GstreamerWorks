@@ -18,7 +18,7 @@ gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test ! rtph264depay ! avde
 gst-launch-1.0 filesrc location=/opt/nvidia/deepstream/deepstream-6.1/samples/streams/sample_720p.mp4 ! nvv4l2decoder ! nvvideoconvert ! nvv4l2h264enc ! rtspclientsink location=rtsp://127.0.0.1:8554/test
 
 
-gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test ! rtph264depay ! nvv4l2decoder ! xvimagesink
+gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test ! rtph264depay ! nvv4l2decoder ! nveglglessink
 
 ### CPU
 gst-launch-1.0 filesrc location='ElephantsDream.mp4' ! qtdemux ! avdec_h264 ! videoconvert ! x264enc ! rtspclientsink location=rtsp://127.0.0.1:8554/test
