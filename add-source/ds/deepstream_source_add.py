@@ -83,23 +83,16 @@ def cb_newpad(decodebin,pad,data):
 def create_uridecode_bin(index,filename):
     global g_source_id_list
     print("Creating uridecodebin for [%s]" % filename)
-
-    # Create a source GstBin to abstract this bin's content from the rest of the
-    # pipeline
     g_source_id_list[index] = index
     bin_name="source-bin-%02d" % index
     print(bin_name)
 
-    # Source element for reading from the uri.
-    # We will use decodebin and let it figure out the container format of the
-    # stream and the codec and plug the appropriate demux and decode plugins.
     bin=Gst.ElementFactory.make("uridecodebin", bin_name)
     if not bin:
         sys.stderr.write(" Unable to create uri decode bin \n")
     # We set the input uri to the source element
     bin.set_property("uri",filename)
-    # Connect to the "pad-added" signal of the decodebin which generates a
-    # callback once a new pad for raw data has been created by the decodebin
+
     bin.connect("pad-added",cb_newpad,g_source_id_list[index])
     bin.connect("child-added",decodebin_child_added,g_source_id_list[index])
 
@@ -204,39 +197,47 @@ def add_sources(data):
     print("Calling Start %d " % source_id)
 
     #Create a uridecode bin with the chosen source id
-    source_bin = create_uridecode_bin(source_id, uri)
+    with open('uri_names.txt','r+',encoding='utf-8') as file:
+        try:
+            new_uri=file.readlines()[0]
+            print(new_uri)
+        except: new_uri=''
+    if new_uri=='':
+        return True
+    else: 
+        source_bin = create_uridecode_bin(source_id, uri)
 
-    if (not source_bin):
-        sys.stderr.write("Failed to create source bin. Exiting.")
-        exit(1)
-    
-    #Add source bin to our list and to pipeline
-    g_source_bin_list[source_id] = source_bin
-    pipeline.add(source_bin)
+        if (not source_bin):
+            sys.stderr.write("Failed to create source bin. Exiting.")
+            exit(1)
+        
+        #Add source bin to our list and to pipeline
+        g_source_bin_list[source_id] = source_bin
+        pipeline.add(source_bin)
 
-    #Set state of source bin to playing
-    state_return = g_source_bin_list[source_id].set_state(Gst.State.PLAYING)
+        #Set state of source bin to playing
+        state_return = g_source_bin_list[source_id].set_state(Gst.State.PLAYING)
 
-    if state_return == Gst.StateChangeReturn.SUCCESS:
-        print("STATE CHANGE SUCCESS\n")
-        source_id += 1
+        if state_return == Gst.StateChangeReturn.SUCCESS:
+            print("STATE CHANGE SUCCESS\n")
+            source_id += 1
 
-    elif state_return == Gst.StateChangeReturn.FAILURE:
-        print("STATE CHANGE FAILURE\n")
-    
-    elif state_return == Gst.StateChangeReturn.ASYNC:
-        state_return = g_source_bin_list[source_id].get_state(Gst.CLOCK_TIME_NONE)
-        source_id += 1
+        elif state_return == Gst.StateChangeReturn.FAILURE:
+            print("STATE CHANGE FAILURE\n")
+        
+        elif state_return == Gst.StateChangeReturn.ASYNC:
+            state_return = g_source_bin_list[source_id].get_state(Gst.CLOCK_TIME_NONE)
+            source_id += 1
 
-    elif state_return == Gst.StateChangeReturn.NO_PREROLL:
-        print("STATE CHANGE NO PREROLL\n")
+        elif state_return == Gst.StateChangeReturn.NO_PREROLL:
+            print("STATE CHANGE NO PREROLL\n")
 
-    g_num_sources += 1
+        g_num_sources += 1
 
-    #If reached the maximum number of sources, delete sources every 10 seconds
-    if (g_num_sources == MAX_NUM_SOURCES):
-        GLib.timeout_add_seconds(10, delete_sources, g_source_bin_list)
-        return False
+        #If reached the maximum number of sources, delete sources every 10 seconds
+        if (g_num_sources == MAX_NUM_SOURCES):
+            GLib.timeout_add_seconds(10, delete_sources, g_source_bin_list)
+            return False
     
     return True
 
@@ -290,8 +291,6 @@ def main(args):
     #Gst.debug_set_active(True)
     #Gst.debug_set_default_threshold(7)
     
-    # Create gstreamer elements */
-    # Create Pipeline element that will form a connection of other elements
     print("Creating Pipeline \n ")
     pipeline = Gst.Pipeline()
     is_live = False
@@ -363,11 +362,6 @@ def main(args):
     tiler.set_property("gpu_id", GPU_ID)
     nvvideoconvert.set_property("gpu_id", GPU_ID)
     
-
-    #Set gpu ID of sink if not aarch64
-    if(not is_aarch64()):
-        sink.set_property("gpu_id", GPU_ID)
-
     print("Adding elements to Pipeline \n")
 
     pipeline.add(tiler)
@@ -377,7 +371,7 @@ def main(args):
 
     # We link elements in the following order:
     # sourcebin -> streammux -> nvinfer -> nvtracker -> nvdsanalytics ->
-    # nvtiler -> nvvideoconvert -> nvdsosd -> (if aarch64, transform ->) sink
+    # nvtiler -> nvvideoconvert -> nvdsosd -> sink
     print("Linking elements in the Pipeline \n")
     streammux.link(tiler)
     tiler.link(nvvideoconvert)
@@ -401,7 +395,7 @@ def main(args):
             print(i, ": ", source)
 
     print("Starting pipeline \n")
-    # start play back and listed to events		
+
     pipeline.set_state(Gst.State.PLAYING)
 
     GLib.timeout_add_seconds(5, add_sources, g_source_bin_list)
