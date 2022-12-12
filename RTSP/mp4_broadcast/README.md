@@ -15,12 +15,12 @@ gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test ! rtph264depay ! avde
 
 
 ### Nvidia
-gst-launch-1.0 filesrc location=/opt/nvidia/deepstream/deepstream-6.1/samples/streams/sample_720p.mp4 ! nvv4l2decoder ! nvvideoconvert ! nvv4l2h264enc ! rtspclientsink location=rtsp://127.0.0.1:8554/test
+gst-launch-1.0 filesrc location='/opt/nvidia/deepstream/deepstream-6.1/samples/streams/sample_720p.mp4' ! qtdemux ! h264parse  ! nvv4l2decoder ! nvvideoconvert ! nvv4l2h264enc ! rtspclientsink location=rtsp://127.0.0.1:8554/test
 
 
-gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test ! rtph264depay ! nvv4l2decoder ! nveglglessink
+gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test ! rtph264depay ! nvv4l2decoder ! nvvideoconvert  ! nveglglessink
 
 ### CPU
-gst-launch-1.0 filesrc location='ElephantsDream.mp4' ! qtdemux ! avdec_h264 ! videoconvert ! x264enc ! rtspclientsink location=rtsp://127.0.0.1:8554/test
+gst-launch-1.0 filesrc location='Murat/ElephantsDream.mp4' ! qtdemux ! avdec_h264 ! videoconvert ! x264enc ! rtspclientsink location=rtsp://127.0.0.1:8554/test
 
 gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test ! rtph264depay ! avdec_h264 ! xvimagesink	
