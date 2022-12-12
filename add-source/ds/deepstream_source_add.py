@@ -1,22 +1,3 @@
-#!/usr/bin/env python3
-
-################################################################################
-# SPDX-FileCopyrightText: Copyright (c) 2021 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-# SPDX-License-Identifier: Apache-2.0
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-################################################################################
-
 
 import sys
 sys.path.append('../')
@@ -49,28 +30,13 @@ TILED_OUTPUT_HEIGHT=720
 GPU_ID = 0
 MAX_NUM_SOURCES = 4
 SINK_ELEMENT = "nveglglessink"
-PGIE_CONFIG_FILE = "dstest_pgie_config.txt"
-TRACKER_CONFIG_FILE = "dstest_tracker_config.txt"
 
-SGIE1_CONFIG_FILE = "dstest_sgie1_config.txt"
-SGIE2_CONFIG_FILE = "dstest_sgie2_config.txt"
-SGIE3_CONFIG_FILE = "dstest_sgie3_config.txt"
-
-CONFIG_GPU_ID = "gpu-id"
-CONFIG_GROUP_TRACKER = "tracker"
-CONFIG_GROUP_TRACKER_WIDTH = "tracker-width"
-CONFIG_GROUP_TRACKER_HEIGHT = "tracker-height"
-CONFIG_GROUP_TRACKER_LL_CONFIG_FILE = "ll-config-file"
-CONFIG_GROUP_TRACKER_LL_LIB_FILE = "ll-lib-file"
-CONFIG_GROUP_TRACKER_ENABLE_BATCH_PROCESS = "enable-batch-process"
 
 g_num_sources = 0
 g_source_id_list = [0] * MAX_NUM_SOURCES
 g_eos_list = [False] * MAX_NUM_SOURCES
 g_source_enabled = [False] * MAX_NUM_SOURCES
 g_source_bin_list = [None] * MAX_NUM_SOURCES
-
-pgie_classes_str= ["Vehicle", "TwoWheeler", "Person","RoadSign"]
 
 uri = ""
 
