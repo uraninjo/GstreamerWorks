@@ -184,60 +184,68 @@ def add_sources(data):
     global g_source_enabled
     global g_source_bin_list
 
-    source_id = g_num_sources
-
-    #Randomly select an un-enabled source to add
-    source_id = random.randrange(0, MAX_NUM_SOURCES)
-    while (g_source_enabled[source_id]):
-        source_id = random.randrange(0, MAX_NUM_SOURCES)
-
-    #Enable the source
-    g_source_enabled[source_id] = True
-
-    print("Calling Start %d " % source_id)
-
-    #Create a uridecode bin with the chosen source id
     with open('uri_names.txt','r+',encoding='utf-8') as file:
         try:
-            new_uri=file.readlines()[0]
+            new_uri=file.readlines()[-1]
             print(new_uri)
         except: new_uri=''
     if new_uri=='':
+        print('Eklenecek RTSP Yok ')
         return True
-    else: 
-        source_bin = create_uridecode_bin(source_id, uri)
+    
+    elif new_uri=='-':
+        delete_sources('.')
 
-        if (not source_bin):
-            sys.stderr.write("Failed to create source bin. Exiting.")
-            exit(1)
-        
-        #Add source bin to our list and to pipeline
-        g_source_bin_list[source_id] = source_bin
-        pipeline.add(source_bin)
-
-        #Set state of source bin to playing
-        state_return = g_source_bin_list[source_id].set_state(Gst.State.PLAYING)
-
-        if state_return == Gst.StateChangeReturn.SUCCESS:
-            print("STATE CHANGE SUCCESS\n")
-            source_id += 1
-
-        elif state_return == Gst.StateChangeReturn.FAILURE:
-            print("STATE CHANGE FAILURE\n")
-        
-        elif state_return == Gst.StateChangeReturn.ASYNC:
-            state_return = g_source_bin_list[source_id].get_state(Gst.CLOCK_TIME_NONE)
-            source_id += 1
-
-        elif state_return == Gst.StateChangeReturn.NO_PREROLL:
-            print("STATE CHANGE NO PREROLL\n")
-
-        g_num_sources += 1
-
-        #If reached the maximum number of sources, delete sources every 10 seconds
+    else:
         if (g_num_sources == MAX_NUM_SOURCES):
-            GLib.timeout_add_seconds(10, delete_sources, g_source_bin_list)
-            return False
+            print('Kamera pozisyonları dolu')
+        else:
+            source_id = g_num_sources
+
+            #Randomly select an un-enabled source to add
+            source_id = random.randrange(0, MAX_NUM_SOURCES)
+            while (g_source_enabled[source_id]):
+                source_id = random.randrange(0, MAX_NUM_SOURCES)
+
+            #Enable the source
+            g_source_enabled[source_id] = True
+
+            print("Calling Start %d " % source_id)
+
+            #Create a uridecode bin with the chosen source id
+            source_bin = create_uridecode_bin(source_id, uri)
+
+            if (not source_bin):
+                sys.stderr.write("Failed to create source bin. Exiting.")
+                exit(1)
+            
+            #Add source bin to our list and to pipeline
+            g_source_bin_list[source_id] = source_bin
+            pipeline.add(source_bin)
+
+            #Set state of source bin to playing
+            state_return = g_source_bin_list[source_id].set_state(Gst.State.PLAYING)
+
+            if state_return == Gst.StateChangeReturn.SUCCESS:
+                print("STATE CHANGE SUCCESS\n")
+                source_id += 1
+
+            elif state_return == Gst.StateChangeReturn.FAILURE:
+                print("STATE CHANGE FAILURE\n")
+            
+            elif state_return == Gst.StateChangeReturn.ASYNC:
+                state_return = g_source_bin_list[source_id].get_state(Gst.CLOCK_TIME_NONE)
+                source_id += 1
+
+            elif state_return == Gst.StateChangeReturn.NO_PREROLL:
+                print("STATE CHANGE NO PREROLL\n")
+
+            g_num_sources += 1
+
+            #If reached the maximum number of sources, delete sources every 10 seconds
+            """if (g_num_sources == MAX_NUM_SOURCES):
+                GLib.timeout_add_seconds(10, delete_sources, g_source_bin_list)
+                return False"""
     
     return True
 
