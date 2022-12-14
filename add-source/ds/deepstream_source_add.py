@@ -195,8 +195,10 @@ def add_sources(data):
     
     elif new_uri=='-':
         delete_sources('.')
+
     elif new_uri=='*':
         return True
+
     else:
         if (g_num_sources == MAX_NUM_SOURCES):
             print('Kamera pozisyonları dolu')
@@ -244,9 +246,7 @@ def add_sources(data):
             g_num_sources += 1
 
             #If reached the maximum number of sources, delete sources every 10 seconds
-            """if (g_num_sources == MAX_NUM_SOURCES):
-                GLib.timeout_add_seconds(10, delete_sources, g_source_bin_list)
-                return False"""
+
     
     return True
 
