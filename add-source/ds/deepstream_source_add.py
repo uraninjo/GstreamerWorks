@@ -195,7 +195,8 @@ def add_sources(data):
     
     elif new_uri=='-':
         delete_sources('.')
-
+    elif new_uri=='*':
+        return True
     else:
         if (g_num_sources == MAX_NUM_SOURCES):
             print('Kamera pozisyonları dolu')
