@@ -1,0 +1,8 @@
+gst-launch-1.0 filesrc location=sample_720p.mp4 ! qtdemux ! avdec_h264 direct-rendering=false lowres=0 max-threads=0 output-corrupt=true skip-frame=0 ! x264enc aud=true b-adapt=false b-pyramid=true bframes=16 bitrate=2048 byte-stream=true cabac=false dct8x8=false ip-factor=1.4 key-int-max=0 noise-reduction=1000 qp-max=51 qp-min=10 qp-step=0 quantizer=50 rc-lookahead=40 sliced-threads=true tune=zerolatency speed-preset=6 trellis=false vbv-buf-capacity=600 weightb=true ! mp4mux ! filesink location=video.mp4
+
+
+gst-launch-1.0 filesrc location=sample_720p.mp4 ! qtdemux ! avdec_h264 direct-rendering=false lowres=0 max-threads=0 output-corrupt=true skip-frame=0 ! x264enc b-adapt=false b-pyramid=true bframes=16 bitrate=2048 cabac=false dct8x8=false ip-factor=1.4 qp-max=51 qp-min=10 qp-step=0 quantizer=50 rc-lookahead=40 tune=zerolatency strellis=false vbv-buf-capacity=600 ! mp4mux ! filesink location=video.mp4
+
+
+gst-launch-1.0 filesrc location=sample_720p.mp4 ! qtdemux ! avdec_h264 direct-rendering=false lowres=0 max-threads=0 output-corrupt=true skip-frame=0 ! x264enc b-adapt=false b-pyramid=true bframes=16 bitrate=2048 cabac=false dct8x8=false ip-factor=1.4 qp-max=51 qp-min=10 qp-step=0 quantizer=50 rc-lookahead=40 tune=zerolatency trellis=false vbv-buf-capacity=600 interlaced=false intra-refresh=false ! mp4mux ! filesink location=video.mp4
+
