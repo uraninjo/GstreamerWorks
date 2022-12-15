@@ -1,0 +1,20 @@
+** https://developer.nvidia.com/gtc/2019/video/s9391/video
+** https://on-demand.gputechconf.com/gtc/2013/presentations/S3478-Debugging-CUDA-Kernel-Code.pdf
+** https://gpgpu.io/2021/11/14/using-visual-studio-code-for-cuda/
+https://www.youtube.com/watch?v=gN3XeFwZ4ng
+** https://www.alcf.anl.gov/sites/default/files/2022-10/nvidia_profiling_tools_keipert_10_4_22.pdf
+https://developer.nvidia.com/blog/unlocking-a-simple-extensible-and-performant-video-pipeline-at-fyma-with-nvidia-deepstream/
+
+
+
+https://developer.nvidia.com/blog/building-multi-camera-media-server-ai-processing-jetson/
+
+https://developer.nvidia.com/blog/nvidia-brings-low-code-development-to-vision-ai-with-deepstream-6-0/
+
+https://www.nvidia.com/en-us/on-demand/session/gtcsiliconvalley2019-s9391/
+
+https://www.nvidia.com/en-us/on-demand/session/gtcfall22-a41172/?playlistId=playList-f3d6e070-f75f-4543-9192-d79d0c321257
+
+https://www.nvidia.com/en-us/on-demand/session/gtcfall22-a41173/?playlistId=playList-f3d6e070-f75f-4543-9192-d79d0c321257
+
+https://www.nvidia.com/en-us/on-demand/session/gtcspring21-s31548/
