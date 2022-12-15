@@ -21,7 +21,7 @@ gst-launch-1.0 filesrc location='/opt/nvidia/deepstream/deepstream-6.1/samples/s
 gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test ! rtph264depay ! nvv4l2decoder ! nvvideoconvert  ! nveglglessink
 
 
-gst-launch-1.0 filesrc location='/opt/nvidia/deepstream/deepstream-6.1/samples/streams/sample_720p.mp4' ! qtdemux ! h264parse  ! nvv4l2decoder capture-io-mode=auto cudadec-memtype=memtype_device drop-frame-interval=0 low-latency-mode=false num-extra-surfaces=0 output-io-mode=mmap skip-frames=0 ! nvvideoconvert ! nvv4l2h264enc bitrate=4000000 capture-io-mode=auto extended-colorformat=true force_idr=false force-intra=false gpu-id=0 iframeinterval=0 output-io-mode=mmap qos=true ! rtspclientsink location=rtsp://127.0.0.1:8554/test
+gst-launch-1.0 filesrc location='/opt/nvidia/deepstream/deepstream-6.1/samples/streams/sample_720p.mp4' ! qtdemux ! h264parse ! nvv4l2decoder capture-io-mode=auto cudadec-memtype=memtype_device drop-frame-interval=0 low-latency-mode=false num-extra-surfaces=0 output-io-mode=mmap skip-frames=0 ! nvvideoconvert ! nvv4l2h264enc bitrate=4000000 capture-io-mode=auto extended-colorformat=true force_idr=false force-intra=false gpu-id=0 iframeinterval=0 output-io-mode=mmap qos=true ! rtspclientsink location=rtsp://127.0.0.1:8554/test
 
 gst-launch-1.0 rtspsrc location=rtsp://127.0.0.1:8554/test ! rtph264depay ! nvv4l2decoder capture-io-mode=auto cudadec-memtype=memtype_device drop-frame-interval=0 low-latency-mode=false num-extra-surfaces=0 output-io-mode=mmap skip-frames=0 ! nvvideoconvert  ! nveglglessink
 
