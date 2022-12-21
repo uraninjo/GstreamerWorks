@@ -8,3 +8,6 @@ gst-launch-1.0 filesrc location=sample_720p.mp4 ! qtdemux ! avdec_h264 direct-re
 
 
 GST_DEBUG="GST_TRACER:7" GST_TRACERS="cpuusage;graphic;framerate;interlatency;proctime;scheduletime;buffer"
+
+
+nvidia-smi --query-gpu=timestamp,name,pci.bus_id,driver_version,pstate,pcie.link.gen.max,pcie.link.gen.current,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv -l 5 -f aa.csv
