@@ -1,0 +1,143 @@
+digraph pipeline {
+  rankdir=LR;
+  fontname="sans";
+  fontsize="10";
+  labelloc=t;
+  nodesep=.1;
+  ranksep=.2;
+  label="<GstPipeline>\npipeline0\n[=] -> [>]";
+  node [style="filled,rounded", shape=box, fontsize="9", fontname="sans", margin="0.0,0.0"];
+  edge [labelfontsize="6", fontsize="9", fontname="monospace"];
+  
+  legend [
+    pos="0,0!",
+    margin="0.05,0.05",
+    style="filled",
+    label="Legend\lElement-States: [~] void-pending, [0] null, [-] ready, [=] paused, [>] playing\lPad-Activation: [-] none, [>] push, [<] pull\lPad-Flags: [b]locked, [f]lushing, [b]locking, [E]OS; upper-case is set\lPad-Task: [T] has started task, [t] has paused task\l",
+  ];
+  subgraph cluster_rtspclientsink0_0x55f29fb0e890 {
+    fontname="Bitstream Vera Sans";
+    fontsize="8";
+    style="filled,rounded";
+    color=black;
+    label="GstRTSPClientSink\nrtspclientsink0\n[>]\nparent=(GstPipeline) pipeline0\nlocation=\"rtsp://127.0.0.1:8554/test\"\nproxy-id=NULL\nproxy-pw=NULL";
+    subgraph cluster_rtspclientsink0_0x55f29fb0e890_sink {
+      label="";
+      style="invis";
+      rtspclientsink0_0x55f29fb0e890_sink_0_0x55f29fb18090 [color=black, fillcolor="#ddddff", label="sink_0\n[>][bfb]", height="0.2", style="filled,dashed"];
+    }
+
+    fillcolor="#ffffff";
+    subgraph cluster_rtspbin_0x55f29fb10130 {
+      fontname="Bitstream Vera Sans";
+      fontsize="8";
+      style="filled,rounded";
+      color=black;
+      label="GstBin\nrtspbin\n[=](locked)\nparent=(GstRTSPClientSink) rtspclientsink0";
+      fillcolor="#ffffff";
+    }
+
+  }
+
+  subgraph cluster_x264enc0_0x55f29fb0b8f0 {
+    fontname="Bitstream Vera Sans";
+    fontsize="8";
+    style="filled,rounded";
+    color=black;
+    label="GstX264Enc\nx264enc0\n[>]\nparent=(GstPipeline) pipeline0";
+    subgraph cluster_x264enc0_0x55f29fb0b8f0_sink {
+      label="";
+      style="invis";
+      x264enc0_0x55f29fb0b8f0_sink_0x55f29fa48f90 [color=black, fillcolor="#aaaaff", label="sink\n[>][bfb]", height="0.2", style="filled,solid"];
+    }
+
+    subgraph cluster_x264enc0_0x55f29fb0b8f0_src {
+      label="";
+      style="invis";
+      x264enc0_0x55f29fb0b8f0_src_0x55f29fa491e0 [color=black, fillcolor="#ffaaaa", label="src\n[>][bfb]", height="0.2", style="filled,solid"];
+    }
+
+    x264enc0_0x55f29fb0b8f0_sink_0x55f29fa48f90 -> x264enc0_0x55f29fb0b8f0_src_0x55f29fa491e0 [style="invis"];
+    fillcolor="#aaffaa";
+  }
+
+  x264enc0_0x55f29fb0b8f0_src_0x55f29fa491e0 -> rtspclientsink0_0x55f29fb0e890_sink_0_0x55f29fb18090 [labeldistance="10", labelangle="0", label="                                                  ", taillabel="video/x-h264\l           framerate: [ 0/1, 2147483647/1 ]\l               width: [ 1, 2147483647 ]\l              height: [ 1, 2147483647 ]\l       stream-format: { (string)avc, (stri... }\l           alignment: au\l             profile: { (string)high-4:4:4... }\l", headlabel="ANY"]
+  subgraph cluster_videoconvert0_0x55f29fb06aa0 {
+    fontname="Bitstream Vera Sans";
+    fontsize="8";
+    style="filled,rounded";
+    color=black;
+    label="GstVideoConvert\nvideoconvert0\n[>]\nparent=(GstPipeline) pipeline0\nqos=TRUE";
+    subgraph cluster_videoconvert0_0x55f29fb06aa0_sink {
+      label="";
+      style="invis";
+      videoconvert0_0x55f29fb06aa0_sink_0x55f29fa48af0 [color=black, fillcolor="#aaaaff", label="sink\n[>][bfb]", height="0.2", style="filled,solid"];
+    }
+
+    subgraph cluster_videoconvert0_0x55f29fb06aa0_src {
+      label="";
+      style="invis";
+      videoconvert0_0x55f29fb06aa0_src_0x55f29fa48d40 [color=black, fillcolor="#ffaaaa", label="src\n[>][bfb]", height="0.2", style="filled,solid"];
+    }
+
+    videoconvert0_0x55f29fb06aa0_sink_0x55f29fa48af0 -> videoconvert0_0x55f29fb06aa0_src_0x55f29fa48d40 [style="invis"];
+    fillcolor="#aaffaa";
+  }
+
+  videoconvert0_0x55f29fb06aa0_src_0x55f29fa48d40 -> x264enc0_0x55f29fb0b8f0_sink_0x55f29fa48f90 [labeldistance="10", labelangle="0", label="                                                  ", taillabel="video/x-raw\l              format: { (string)I420, (str... }\l               width: [ 1, 2147483647 ]\l              height: [ 1, 2147483647 ]\l           framerate: [ 0/1, 2147483647/1 ]\lvideo/x-raw(ANY)\l              format: { (string)I420, (str... }\l               width: [ 1, 2147483647 ]\l              height: [ 1, 2147483647 ]\l           framerate: [ 0/1, 2147483647/1 ]\l", headlabel="video/x-raw\l           framerate: [ 0/1, 2147483647/1 ]\l               width: [ 16, 2147483647 ]\l              height: [ 16, 2147483647 ]\l              format: { (string)Y444, (str... }\l"]
+  subgraph cluster_avdec_h264_0_0x55f29faef960 {
+    fontname="Bitstream Vera Sans";
+    fontsize="8";
+    style="filled,rounded";
+    color=black;
+    label="avdec_h264\navdec_h264-0\n[>]\nparent=(GstPipeline) pipeline0";
+    subgraph cluster_avdec_h264_0_0x55f29faef960_sink {
+      label="";
+      style="invis";
+      avdec_h264_0_0x55f29faef960_sink_0x55f29fa48650 [color=black, fillcolor="#aaaaff", label="sink\n[>][bfb]", height="0.2", style="filled,solid"];
+    }
+
+    subgraph cluster_avdec_h264_0_0x55f29faef960_src {
+      label="";
+      style="invis";
+      avdec_h264_0_0x55f29faef960_src_0x55f29fa488a0 [color=black, fillcolor="#ffaaaa", label="src\n[>][bfb]", height="0.2", style="filled,solid"];
+    }
+
+    avdec_h264_0_0x55f29faef960_sink_0x55f29fa48650 -> avdec_h264_0_0x55f29faef960_src_0x55f29fa488a0 [style="invis"];
+    fillcolor="#aaffaa";
+  }
+
+  avdec_h264_0_0x55f29faef960_src_0x55f29fa488a0 -> videoconvert0_0x55f29fb06aa0_sink_0x55f29fa48af0 [labeldistance="10", labelangle="0", label="                                                  ", taillabel="video/x-raw\l              format: { (string)I420, (str... }\l", headlabel="video/x-raw\l              format: { (string)I420, (str... }\l               width: [ 1, 2147483647 ]\l              height: [ 1, 2147483647 ]\l           framerate: [ 0/1, 2147483647/1 ]\lvideo/x-raw(ANY)\l              format: { (string)I420, (str... }\l               width: [ 1, 2147483647 ]\l              height: [ 1, 2147483647 ]\l           framerate: [ 0/1, 2147483647/1 ]\l"]
+  subgraph cluster_rtph264depay0_0x55f29fa46160 {
+    fontname="Bitstream Vera Sans";
+    fontsize="8";
+    style="filled,rounded";
+    color=black;
+    label="GstRtpH264Depay\nrtph264depay0\n[>]\nparent=(GstPipeline) pipeline0\nstats=application/x-rtp-depayload-stats, clock_rate=(uint)0, npt-start=(guint64)0, npt…";
+    subgraph cluster_rtph264depay0_0x55f29fa46160_sink {
+      label="";
+      style="invis";
+      rtph264depay0_0x55f29fa46160_sink_0x55f29fa481b0 [color=black, fillcolor="#aaaaff", label="sink\n[>][bfb]", height="0.2", style="filled,solid"];
+    }
+
+    subgraph cluster_rtph264depay0_0x55f29fa46160_src {
+      label="";
+      style="invis";
+      rtph264depay0_0x55f29fa46160_src_0x55f29fa48400 [color=black, fillcolor="#ffaaaa", label="src\n[>][bfb]", height="0.2", style="filled,solid"];
+    }
+
+    rtph264depay0_0x55f29fa46160_sink_0x55f29fa481b0 -> rtph264depay0_0x55f29fa46160_src_0x55f29fa48400 [style="invis"];
+    fillcolor="#aaffaa";
+  }
+
+  rtph264depay0_0x55f29fa46160_src_0x55f29fa48400 -> avdec_h264_0_0x55f29faef960_sink_0x55f29fa48650 [labeldistance="10", labelangle="0", label="                                                  ", taillabel="video/x-h264\l       stream-format: avc\l           alignment: au\lvideo/x-h264\l       stream-format: byte-stream\l           alignment: { (string)nal, (stri... }\l", headlabel="video/x-h264\l           alignment: au\l       stream-format: { (string)avc, (stri... }\l"]
+  subgraph cluster_rtspsrc0_0x55f29fa31a20 {
+    fontname="Bitstream Vera Sans";
+    fontsize="8";
+    style="filled,rounded";
+    color=black;
+    label="GstRTSPSrc\nrtspsrc0\n[>]\nparent=(GstPipeline) pipeline0\nlocation=\"rtsp://admin:123456@37.202.49.154:49675/h264\"\nproxy-id=NULL\nproxy-pw=NULL";
+    fillcolor="#ffffff";
+  }
+
+}

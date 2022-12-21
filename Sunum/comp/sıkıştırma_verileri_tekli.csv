@@ -1,10 +1,11 @@
-Ortalama 12sn
-23.332 MegaBytes
-13.856 MegaBytes
-13.748 MegaBytes
-13.864 MegaBytes
-13.835 MegaBytes
-13.872 MegaBytes
-13.865 MegaBytes
-13.732 MegaBytes
-13.852 MegaBytes
+,Ortalama 12sn
+original,23.332 MegaBytes
+cabac_true,13.857 MegaBytes
+cabac_false,13.756 MegaBytes
+dct8x8_true,13.873 MegaBytes
+dct8x8_false,13.847 MegaBytes
+interlaced_true,13.848 MegaBytes
+interlaced_false,13.847 MegaBytes
+intra-refresh_true,13.753 MegaBytes
+intra-refresh_false,13.870 MegaBytes
+en_iyi,13.558
