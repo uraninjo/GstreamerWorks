@@ -37,5 +37,7 @@ cmake ..
 make
 # Installing the pip wheel
 apt install libgirepository1.0-dev libcairo2-dev -y
-pip3 install pyds-1.1.4-py3-none-linux_x86_64.whl
+apt install wget
+wget https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases/download/v1.1.5/pyds-1.1.5-py3-none-linux_x86_64.whl
+pip3 install pyds-1.1.5-py3-none-linux_x86_64.whl
 
